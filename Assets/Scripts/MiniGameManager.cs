@@ -3,6 +3,9 @@ using UnityEngine;
 public class MiniGameManager : MonoBehaviour
 {
     public static MiniGameManager miniGameManager;
+    public CapScript activeCap = null;
+
+    [SerializeField] private ScrewScript[] screwArray = new ScrewScript[8];
     [SerializeField] public GlobalCameraScript cameraPosition;
 
     private void Awake() => miniGameManager = this;

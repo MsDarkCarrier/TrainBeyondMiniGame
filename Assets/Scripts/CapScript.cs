@@ -38,10 +38,12 @@ public class CapScript : MonoBehaviour
                 if (Input.GetMouseButton(1))
                 {
                     capState = CapStates.avalible;
-                    capTree.SetBool("Hover", false);
                     transform.position = initPosition;
+                    capTree.SetBool("Hover", false);
+                    miniGameManager.activeCap = null;
                     return;
                 }
+                capTree.SetBool("Hover", true);
                 transform.position = miniGameManager.cameraPosition.mousePosition;
                 break;
 
@@ -50,24 +52,28 @@ public class CapScript : MonoBehaviour
                 Vector2 mousePosition = Input.mousePosition;
                 Ray rayCamera = Camera.main.ScreenPointToRay(mousePosition);
 
-
-                if (Physics.Raycast(rayCamera, out RaycastHit hitRaycast, Mathf.Infinity, capMask))
+                if (Physics.Raycast(rayCamera, out RaycastHit hitRaycast, 300, capMask) && hitRaycast.collider.TryGetComponent(out CapScript scriptObjeto) && scriptObjeto.name == name && !Physics.Raycast(transform.position, Vector3.up, out RaycastHit detection, 30))
                 {
-                    meshRenderer.material.SetColor("_BaseColor", colorOriginal * 0.8f);
-                    capTree.SetBool("Hover", true);
+
+                    meshRenderer.material.SetColor("_BaseColor", colorOriginal * 0.5f);
                     if (Input.GetMouseButton(0))
                     {
-                        capTree.SetBool("Hover", false);
                         capState = CapStates.selected;
+                        miniGameManager.activeCap = this;
                     }
+
                 }
-                else
-                {
-                    meshRenderer.material.SetColor("_BaseColor", colorOriginal);
-                    capTree.SetBool("Hover", false);
-                }
+                else meshRenderer.material.SetColor("_BaseColor", colorOriginal);
+
                 break;
         }
 
+    }
+
+    public void CapSelected(Vector3 activeCap)
+    {
+        capState = CapStates.blocking;
+        transform.position = activeCap;
+        meshRenderer.material.SetColor("_BaseColor", colorOriginal * 0.2f);
     }
 }
