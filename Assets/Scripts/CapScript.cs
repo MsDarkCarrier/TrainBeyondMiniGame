@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -21,6 +22,7 @@ public class CapScript : MonoBehaviour
     private float velocity = 300;
     public bool rotateCap { get; private set; }
     private MiniGameManager miniGameManager;
+    public Action capActionRotate;
 
     [SerializeField] private LayerMask capMask;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -89,6 +91,7 @@ public class CapScript : MonoBehaviour
 
     public void CapCorrectColor() => meshRenderer.material.SetColor("_BaseColor", Color.green);
     public void CapIncorrectColor() => meshRenderer.material.SetColor("_BaseColor", Color.red);
+    public void CapBlueColor() => meshRenderer.material.SetColor("_BaseColor", Color.blue);
 
     public void CapMovePosition(Vector3 positionMove)
     {
@@ -131,6 +134,8 @@ public class CapScript : MonoBehaviour
 
         meshRenderer.material.SetColor("_BaseColor", colorOriginal * 0.5f);
         velocity = 30;
+        capActionRotate?.Invoke();
+        capActionRotate = null;
     }
 
 

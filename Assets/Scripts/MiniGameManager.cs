@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -76,6 +77,10 @@ public class MiniGameManager : MonoBehaviour
         {
             CapScript cap = capSelected.Dequeue();
             ScrewScript screw = screwArray[correctOrder.Dequeue()];
+            cap.capActionRotate = () =>
+            {
+                cap.CapBlueColor();
+            };
 
             cap.CapMovePosition(moveCap);
             while (cap.distanceTarget > 0.01f) yield return null;
