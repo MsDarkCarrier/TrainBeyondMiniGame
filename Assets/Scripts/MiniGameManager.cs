@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class MiniGameManager : MonoBehaviour
 {
     public static MiniGameManager miniGameManager;
-    public CapScript activeCap = null;
+    [SerializeField] public CapScript activeCap = null;
     private int[] capCorrectOrder = new int[8] { 3, 6, 0, 1, 4, 7, 5, 2 };
     public Queue<ScrewScript> orderScrew = new Queue<ScrewScript>();
     public bool pauseActive { get; private set; }
@@ -86,11 +86,12 @@ public class MiniGameManager : MonoBehaviour
             while (cap.distanceTarget > 0.01f) yield return null;
             yield return new WaitForSeconds(2);
             screw.ScrewAddCap(cap);
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(1);
+            while (cap.distanceTarget > 0.01f) yield return null;
             cap.CapCorrectColor();
             screw.ScrewRotateCap();
         }
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
         foreach (CapScript colorCap in capArray) colorCap.CapCorrectColor();
         text.text = "Complete Correct Order!!";
         yield return new WaitForSeconds(2f);
@@ -101,15 +102,17 @@ public class MiniGameManager : MonoBehaviour
     {
         Queue<int> correctOrder = new Queue<int>(capCorrectOrder);
         float velocityWait = 1.5f;
+        bool errorDetected = false;
         while (orderScrew.Count > 0)
         {
             ScrewScript screw = orderScrew.Dequeue();
-            if (screw.screwId == correctOrder.Dequeue()) screw.capSelect.CapCorrectColor();
+            if (screw.screwId == correctOrder.Dequeue() && !errorDetected) screw.capSelect.CapCorrectColor();
             else
             {
                 screw.capSelect.CapIncorrectColor();
                 textAnimator.SetFloat("LetterStatus", 0.5f);
                 text.text = "Error OrderCap Detected!!...";
+                errorDetected = true;
                 velocityWait = 0.5f;
             }
 

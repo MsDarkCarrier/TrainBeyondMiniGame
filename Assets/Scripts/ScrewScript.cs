@@ -47,7 +47,7 @@ public class ScrewScript : MonoBehaviour
 
             case ScrewStatus.activeCap:
 
-                bool distanceMouse = Vector3.Distance(vectorCap, miniGameManager.cameraPosition.mousePosition) <= 10 && !capSelect.rotateCap;
+                bool distanceMouse = Vector3.Distance(vectorCap, miniGameManager.cameraPosition.mousePosition) <= 10 && !capSelect.rotateCap && miniGameManager.activeCap == null;
                 if (distanceMouse && Input.GetMouseButton(1))
                 {
                     capSelect.CapDeselect();
@@ -66,6 +66,7 @@ public class ScrewScript : MonoBehaviour
         cap.CapSelected(vectorCap);
         capSelect = cap;
         screwStatus = ScrewStatus.disableStatus;
+        miniGameManager.activeCap = null;
     }
 
     public void ScrewRotateCap()
@@ -77,7 +78,7 @@ public class ScrewScript : MonoBehaviour
 
     public async Task TimeAwaitCap()
     {
-        await Awaitable.WaitForSecondsAsync(0.2f);
+        await Awaitable.WaitForSecondsAsync(0.1f);
         screwStatus = ScrewStatus.activeCap;
     }
 
