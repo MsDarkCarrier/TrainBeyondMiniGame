@@ -63,7 +63,7 @@ public class MiniGameManager : MonoBehaviour
         pauseActive = true;
         text.text = "Running in the correct order....";
         textAnimator.SetBool("Opacity", true);
-        textAnimator.SetFloat("LetterStatus", 3);
+        textAnimator.SetFloat("LetterStatus", 1);
         StartCoroutine(OrderCaps());
     }
 
@@ -92,7 +92,7 @@ public class MiniGameManager : MonoBehaviour
         }
         yield return new WaitForSeconds(1f);
         foreach (CapScript colorCap in capArray) colorCap.CapCorrectColor();
-        text.text = "Complete Correct Order";
+        text.text = "Complete Correct Order!!";
         yield return new WaitForSeconds(2f);
         ResetScrew();
     }
@@ -108,8 +108,8 @@ public class MiniGameManager : MonoBehaviour
             else
             {
                 screw.capSelect.CapIncorrectColor();
-                textAnimator.SetFloat("LetterStatus", 1);
-                text.text = "Error_OrderCap_Detected...";
+                textAnimator.SetFloat("LetterStatus", 0.5f);
+                text.text = "Error OrderCap Detected!!...";
                 velocityWait = 0.5f;
             }
 
